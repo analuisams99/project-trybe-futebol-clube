@@ -5,16 +5,14 @@ import AuthService from '../services/tokenAuth';
 import statusCode from '../utils/statusCode';
 
 const { emailOrPasswordInvalid } = statusCode.errors;
-const { OK } = statusCode.StatusCodes;
+const { OK, Unauthorized } = statusCode.StatusCodes;
 
 export default class LoginController {
-  private _userService;
-
   constructor(
     private _loginService = new AuthService(),
-  ) {
-    this._userService = new UserService();
-  }
+    private _userService = new UserService(),
+    private _authentication = new AuthService(),
+  ) { }
 
   public login = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
@@ -29,6 +27,21 @@ export default class LoginController {
       const token = await this._loginService.authenticate(user as IUser);
 
       res.status(OK).json({ user, token });
+    } catch (e) {
+      next(e);
+    }
+  };
+
+  public loginValidate = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const { authorization } = req.headers;
+      if (!authorization) res.status(Unauthorized).json({ message: 'Unauthorized' });
+
+      const IsTokenValid = this._authentication.verifyToken(authorization as string);
+      if (typeof IsTokenValid === 'string') {
+        res.status(OK).json(IsTokenValid);
+      }
+      res.status(Unauthorized).json({ message: 'Unauthorized' });
     } catch (e) {
       next(e);
     }
