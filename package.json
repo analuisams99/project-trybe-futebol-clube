@@ -28,6 +28,8 @@
     "sequelize-cli": "^6.4.1"
   },
   "dependencies": {
+    "@types/bcryptjs": "^2.4.2",
+    "bcryptjs": "^2.4.3",
     "camelcase": "6.3.0",
     "http-status-codes": "2.2.0",
     "jsonwebtoken": "8.5.1",
