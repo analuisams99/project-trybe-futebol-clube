@@ -11,13 +11,13 @@ export default class AuthService {
     return token;
   };
 
-  public verifyToken = (token: string): boolean => {
+  public verifyToken = (token: string): string | boolean => {
     try {
-      JWT.verify(token, JWT_SECRET);
+      const { role } = JWT.verify(token, JWT_SECRET) as IUser;
+      return role;
     } catch (e) {
       return false;
     }
-
     return true;
   };
 }
