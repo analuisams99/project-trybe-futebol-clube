@@ -14,14 +14,15 @@ Teams.init({
     primaryKey: true,
     type: INTEGER,
   },
-  team_name: {
+  teamName: {
     allowNull: false,
     type: STRING,
   },
 }, {
   underscored: true,
   sequelize: db,
-  modelName: 'teams',
+  modelName: 'Teams',
+  tableName: 'teams',
   timestamps: false,
 });
 

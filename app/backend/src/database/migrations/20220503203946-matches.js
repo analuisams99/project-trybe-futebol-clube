@@ -9,9 +9,10 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      home_team: {
+      homeTeam: {
         allowNull: false,
         type: Sequelize.INTEGER,
+        field: 'home_team',
         references: {
           model: 'teams',
           key: 'id',
@@ -19,13 +20,15 @@ module.exports = {
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
       },
-      home_team_goals: {
-        allowNull: false,
-        type: Sequelize.INTEGER
-      },
-      away_team: {
+      homeTeamGoals: {
         allowNull: false,
         type: Sequelize.INTEGER,
+        field: 'home_team_goals',
+      },
+      awayTeam: {
+        allowNull: false,
+        type: Sequelize.INTEGER,
+        field: 'away_team',
         references: {
           model: 'teams',
           key: 'id',
@@ -33,13 +36,15 @@ module.exports = {
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
       },
-      away_team_goals: {
+      awayTeamGoals: {
         allowNull: false,
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        field: 'away_team_goals',
       },
-      in_progress: {
+      inProgress: {
         allowNull: false,
-        type: Sequelize.BOOLEAN
+        type: Sequelize.BOOLEAN,
+        field: 'in_progress'
       },
     });
   },
