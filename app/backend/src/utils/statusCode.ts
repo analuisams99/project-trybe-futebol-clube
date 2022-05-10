@@ -2,7 +2,6 @@ enum StatusCodes {
   OK = 200,
   BadRequest = 400,
   Unauthorized,
-
 }
 
 const errors = {
