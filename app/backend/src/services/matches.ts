@@ -1,5 +1,5 @@
 import { TeamEntity } from '../interfaces/Teams';
-import { MatchEntity, MatchWithTeams } from '../interfaces/Matches';
+import { IMatch, MatchEntity, MatchWithTeams } from '../interfaces/Matches';
 import Matches from '../database/models/Matches';
 import Teams from '../database/models/Teams';
 
@@ -8,6 +8,22 @@ export default class MatchesService {
     private _matchesModel = Matches,
     private _teamsModel = Teams,
   ) {}
+
+  public async create(match: IMatch): Promise<MatchEntity | boolean> {
+    const { homeTeam, awayTeam } = match;
+
+    const isHomeTeamValid = await this._matchesModel.findByPk(homeTeam);
+    const isAwayTeamValid = await this._matchesModel.findByPk(awayTeam);
+
+    if (!isHomeTeamValid || !isAwayTeamValid) return false;
+
+    const result = await this._matchesModel.create(match) as MatchEntity;
+    return result;
+  }
+
+  public async inProgressUpdate(id: number): Promise<void> {
+    await this._matchesModel.update({ inProgress: false }, { where: { id } });
+  }
 
   public async getAll(inProgress: string | undefined): Promise<MatchWithTeams[]> {
     const matches = await this._matchesModel.findAll({ raw: true }) as MatchEntity[];
