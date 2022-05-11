@@ -4,12 +4,13 @@ import MatchesController from '../controllers/matches';
 
 const router = Router();
 
-const { getAll, create, inProgressUpdate } = new MatchesController();
+const { getAll, create, inProgressUpdate, matchUpdate } = new MatchesController();
 const { tokenValidation } = new TokenValidation();
 
 router
   .post('/', tokenValidation, create)
   .patch('/:id/finish', inProgressUpdate)
+  .patch('/:id', matchUpdate)
   .get('/', getAll);
 
 export default router;
