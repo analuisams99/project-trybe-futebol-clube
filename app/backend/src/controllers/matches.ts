@@ -1,10 +1,11 @@
 import { NextFunction, Request, Response } from 'express';
+import { MatchGoalsEntry } from '../interfaces/Matches';
 import MatchesService from '../services/matches';
 import statusCode from '../utils/statusCode';
 
 const { OK, CREATED } = statusCode.StatusCodes;
 const {
-  equalTeams, notFoundTeamById, matchFinished, matchesNotFound,
+  equalTeams, notFoundTeamById, matchFinished, matchesNotFound, matchUpdated,
 } = statusCode.errors;
 
 export default class MatchesController {
@@ -40,6 +41,19 @@ export default class MatchesController {
       const { id } = req.params;
       await this._matchesService.inProgressUpdate(+id);
       res.status(matchFinished.status).json(matchFinished.message);
+    } catch (e) {
+      next(e);
+    }
+  };
+
+  public matchUpdate = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const { id } = req.params;
+      const { homeTeamGoals, awayTeamGoals } = req.body as MatchGoalsEntry;
+      const matchGoals = { homeTeamGoals, awayTeamGoals };
+
+      await this._matchesService.matchUpdate(+id, matchGoals);
+      res.status(matchUpdated.status).json(matchUpdated.message);
     } catch (e) {
       next(e);
     }

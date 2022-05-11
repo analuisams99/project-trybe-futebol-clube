@@ -1,5 +1,5 @@
 import { TeamEntity } from '../interfaces/Teams';
-import { IMatch, MatchEntity, MatchWithTeams } from '../interfaces/Matches';
+import { IMatch, MatchEntity, MatchGoalsEntry, MatchWithTeams } from '../interfaces/Matches';
 import Matches from '../database/models/Matches';
 import Teams from '../database/models/Teams';
 
@@ -23,6 +23,13 @@ export default class MatchesService {
 
   public async inProgressUpdate(id: number): Promise<void> {
     await this._matchesModel.update({ inProgress: false }, { where: { id } });
+  }
+
+  public async matchUpdate(id: number, { homeTeamGoals, awayTeamGoals }
+  : MatchGoalsEntry): Promise<void> {
+    await this._matchesModel.update({ homeTeamGoals, awayTeamGoals }, {
+      where: { id },
+    });
   }
 
   public async getAll(inProgress: string | undefined): Promise<MatchWithTeams[]> {
