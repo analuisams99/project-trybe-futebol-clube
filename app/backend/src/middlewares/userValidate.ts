@@ -11,13 +11,13 @@ export default class UserValidation {
     const { email } = req.body;
 
     if (email === '') {
-      const { code, message } = fieldNotFilled;
-      return res.status(code).json({ message });
+      const { status, message } = fieldNotFilled;
+      return res.status(status).json({ message });
     }
 
     if (!EMAIL_REGEX.test(email)) {
-      const { code, message } = emailOrPasswordInvalid;
-      return res.status(code).json({ message });
+      const { status, message } = emailOrPasswordInvalid;
+      return res.status(status).json({ message });
     }
 
     next();
@@ -27,16 +27,16 @@ export default class UserValidation {
     const { email, password } = req.body;
 
     if (password === '') {
-      const { code, message } = fieldNotFilled;
-      return res.status(code).json({ message });
+      const { status, message } = fieldNotFilled;
+      return res.status(status).json({ message });
     }
 
     const user = await Users.findOne({ where: { email } });
     if (user) {
       const isPasswordValid = bcrypt.compareSync(password, user.password);
       if (!isPasswordValid) {
-        const { code, message } = emailOrPasswordInvalid;
-        return res.status(code).json({ message });
+        const { status, message } = emailOrPasswordInvalid;
+        return res.status(status).json({ message });
       }
     }
     next();

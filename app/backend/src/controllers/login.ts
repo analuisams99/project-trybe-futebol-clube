@@ -4,8 +4,8 @@ import UserService from '../services/user';
 import AuthService from '../services/tokenAuth';
 import statusCode from '../utils/statusCode';
 
-const { emailOrPasswordInvalid } = statusCode.errors;
-const { OK, Unauthorized } = statusCode.StatusCodes;
+const { emailOrPasswordInvalid, unauthorizedUser } = statusCode.errors;
+const { OK } = statusCode.StatusCodes;
 
 export default class LoginController {
   constructor(
@@ -20,8 +20,8 @@ export default class LoginController {
       const user = await this._userService.login(email);
 
       if (!user) {
-        const { code, message } = emailOrPasswordInvalid;
-        res.status(code).json({ message });
+        const { status, message } = emailOrPasswordInvalid;
+        res.status(status).json({ message });
       }
 
       const token = await this._loginService.authenticate(user as IUser);
@@ -35,13 +35,13 @@ export default class LoginController {
   public loginValidate = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const { authorization } = req.headers;
-      if (!authorization) res.status(Unauthorized).json({ message: 'Unauthorized' });
+      if (!authorization) res.status(unauthorizedUser.status).json(unauthorizedUser.message);
 
       const IsTokenValid = this._authentication.verifyToken(authorization as string);
       if (typeof IsTokenValid === 'string') {
         res.status(OK).json(IsTokenValid);
       }
-      res.status(Unauthorized).json({ message: 'Unauthorized' });
+      res.status(unauthorizedUser.status).json(unauthorizedUser.message);
     } catch (e) {
       next(e);
     }

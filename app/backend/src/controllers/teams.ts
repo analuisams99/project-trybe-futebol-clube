@@ -2,7 +2,8 @@ import { NextFunction, Request, Response } from 'express';
 import TeamsService from '../services/teams';
 import statusCode from '../utils/statusCode';
 
-const { OK, BadRequest } = statusCode.StatusCodes;
+const { OK } = statusCode.StatusCodes;
+const { invalidId, teamsNotFound } = statusCode.errors;
 
 export default class TeamsController {
   constructor(
@@ -15,7 +16,7 @@ export default class TeamsController {
       const team = await this._teamsService.getById(+id);
 
       if (!team) {
-        res.status(BadRequest).json({ message: 'Invalid Id' });
+        res.status(invalidId.status).json(invalidId.message);
       }
       res.status(OK).json(team);
     } catch (e) {
@@ -27,7 +28,7 @@ export default class TeamsController {
     try {
       const teams = await this._teamsService.getAll();
       if (!teams) {
-        res.status(BadRequest).json({ message: 'Teams not found' });
+        res.status(teamsNotFound.status).json(teamsNotFound.message);
       }
       res.status(OK).json(teams);
     } catch (e) {
