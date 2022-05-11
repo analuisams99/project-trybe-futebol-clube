@@ -1,5 +1,4 @@
-export interface MatchEntity {
-  id: number;
+export interface IMatch {
   homeTeam: number;
   homeTeamGoals: number;
   awayTeam: number;
@@ -7,13 +6,11 @@ export interface MatchEntity {
   inProgress: boolean;
 }
 
-export interface MatchWithTeams {
+export interface MatchEntity extends IMatch {
   id: number;
-  homeTeam: number;
-  homeTeamGoals: number;
-  awayTeam: number;
-  awayTeamGoals: number;
-  inProgress: boolean;
+}
+
+export interface MatchWithTeams extends MatchEntity {
   teamHome: {
     teamName: string
   },
