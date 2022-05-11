@@ -27,6 +27,10 @@ const errors = {
     status: StatusCodes.OK,
     message: 'Match finished',
   },
+  matchUpdated: {
+    status: StatusCodes.OK,
+    message: 'Match Updated',
+  },
   matchesNotFound: {
     status: StatusCodes.BAD_REQUEST,
     message: 'Matches not found',
