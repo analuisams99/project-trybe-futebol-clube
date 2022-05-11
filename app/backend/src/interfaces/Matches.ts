@@ -18,3 +18,8 @@ export interface MatchWithTeams extends MatchEntity {
     teamName: string
   }
 }
+
+export interface MatchGoalsEntry {
+  homeTeamGoals: number;
+  awayTeamGoals: number;
+}
