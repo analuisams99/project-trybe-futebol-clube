@@ -3,11 +3,11 @@ import LeaderboardController from '../controllers/leaderboard';
 
 const router = Router();
 
-const { getAllLeaderboard, getLeaderboardHome } = new LeaderboardController();
+const { getAllLeaderboard, getLeaderboardHome, getLeaderboardAway } = new LeaderboardController();
 
 router
   .get('/', getAllLeaderboard)
-  .get('/home', getLeaderboardHome)
-  .get('/away');
+  .get('/away', getLeaderboardAway)
+  .get('/home', getLeaderboardHome);
 
 export default router;
