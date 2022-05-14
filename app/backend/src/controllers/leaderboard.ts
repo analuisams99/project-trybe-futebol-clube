@@ -1,16 +1,16 @@
 import { NextFunction, Request, Response } from 'express';
+import LeaderboardAwayService from '../services/leaderboardAway';
 import LeaderboardHomeService from '../services/leaderboardHome';
 import LeaderboardService from '../services/leaderboard';
 import statusCode from '../utils/statusCode';
-import LeaderboardAwayService from '../services/leaderboardAway';
 
 const { OK } = statusCode.StatusCodes;
 
 export default class LeaderboardController {
   constructor(
     private _leaderboardService = new LeaderboardService(),
-    private _leaderboardHomeService = new LeaderboardHomeService(),
     private _leaderboardAwayService = new LeaderboardAwayService(),
+    private _leaderboardHomeService = new LeaderboardHomeService(),
 
   ) { }
 

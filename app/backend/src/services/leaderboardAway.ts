@@ -29,7 +29,7 @@ export default class LeaderboardAwayService {
     return allTeamsMap;
   }
 
-  private calcTotalGoalsAndGamesAway(AT: number, HTGOALS: number, ATGOALS: number)
+  private calcTotalGoalsAndGamesAway(HTGOALS: number, AT: number, ATGOALS: number)
     : void {
     this._leaderboardAwayObj[AT].totalGames += 1;
     this._leaderboardAwayObj[AT].goalsFavor += ATGOALS;
