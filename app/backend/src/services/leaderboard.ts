@@ -12,7 +12,7 @@ export default class LeaderboardService {
 
   private async createInitialLeaderboard(): Promise<ILeaderboard[]> {
     const allTeams = await this._teamsModel.findAll();
-    const variavel = await Promise.all(allTeams.map(async ({ id, teamName }) => {
+    const allTeamsMap = await Promise.all(allTeams.map(async ({ id, teamName }) => {
       // coloca id do time para achar os times no dicionário, coloca nome do time e inicia os todos pontos em zero;
       this._leaderboardObj[id] = {
         name: teamName,
@@ -28,7 +28,7 @@ export default class LeaderboardService {
       };
       return this._leaderboardObj[id];
     }));
-    return variavel;
+    return allTeamsMap;
   }
 
   private calcTotalGoalsAndGamesInGeneral(HT: number, HTGOALS: number, AT: number, ATGOALS: number)
