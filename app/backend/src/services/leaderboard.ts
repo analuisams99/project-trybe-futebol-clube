@@ -10,10 +10,10 @@ export default class LeaderboardService {
     private _leaderboardObj: { [id:number] : ILeaderboard } = {},
   ) {}
 
-  private async createInitialLeaderboard(): Promise<void> {
+  private async createInitialLeaderboard(): Promise<ILeaderboard[]> {
     const allTeams = await this._teamsModel.findAll();
-    allTeams.forEach(({ id, teamName }) => {
-    // coloca id do time para achar os times no dicionário, coloca nome do time e inicia os todos pontos em zero;
+    const variavel = await Promise.all(allTeams.map(async ({ id, teamName }) => {
+      // coloca id do time para achar os times no dicionário, coloca nome do time e inicia os todos pontos em zero;
       this._leaderboardObj[id] = {
         name: teamName,
         totalPoints: 0,
@@ -26,11 +26,13 @@ export default class LeaderboardService {
         goalsBalance: 0,
         efficiency: 0.00,
       };
-    });
+      return this._leaderboardObj[id];
+    }));
+    return variavel;
   }
 
-  // filter
-  private calcTotalGoalsAndGames(HT: number, HTGOALS: number, AT: number, ATGOALS: number): void {
+  private calcTotalGoalsAndGamesInGeneral(HT: number, HTGOALS: number, AT: number, ATGOALS: number)
+    : void {
     // total de jogos (incrementa 1 a cada partida)
     this._leaderboardObj[HT].totalGames += 1;
     this._leaderboardObj[AT].totalGames += 1;
@@ -107,18 +109,22 @@ export default class LeaderboardService {
   }
 
   public async getLeaderboard(): Promise<ILeaderboard[]> {
-    this.createInitialLeaderboard();
+    await this.createInitialLeaderboard();
     const matches = await this._matchesModel.findAll();
 
-    matches.forEach(({ homeTeam, homeTeamGoals, awayTeam, awayTeamGoals, inProgress }) => {
-      if (inProgress === false) {
-        this.calcTotalGoalsAndGames(homeTeam, homeTeamGoals, awayTeam, awayTeamGoals);
-        this.calcTotalPoints(homeTeam, homeTeamGoals, awayTeam, awayTeamGoals);
-        this.calculateTeamEfficiency(homeTeam, awayTeam);
-      }
-    });
-
-    const result = this.sortLeaderboard();
+    await Promise.all(matches
+      .map(async ({ homeTeam, homeTeamGoals, awayTeam, awayTeamGoals, inProgress }) => {
+        if (inProgress === false) {
+          this.calcTotalGoalsAndGamesInGeneral(homeTeam, homeTeamGoals, awayTeam, awayTeamGoals);
+          this.calcTotalPoints(homeTeam, homeTeamGoals, awayTeam, awayTeamGoals);
+          this.calculateTeamEfficiency(homeTeam, awayTeam);
+        }
+      }));
+    const sortLeaderboardsResult = this.sortLeaderboard();
+    // quando uma nova partida for criada ele irá mapear novamente os resultados
+    const result = sortLeaderboardsResult.map((eachLeaderboard) => ({ ...eachLeaderboard }));
+    // zera o _leaderboardObj quando a função de mapeamento acaba;
+    this._leaderboardObj = [];
     return result;
   }
 }
