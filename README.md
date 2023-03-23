@@ -1,6 +1,6 @@
 # Projeto Trybe Futebol Clube
 
-## O que foi desenvolvido
+## ⚽ O que foi desenvolvido
 
 O `TFC` é um site informativo sobre partidas e classificações de futebol! ⚽️
 
@@ -14,6 +14,20 @@ Nesse projeto, construi **um back-end dockerizado utilizando modelagem de dados 
    - Construir uma **API REST** com endpoints para consumir os models criados;
    - Fazer um `CRUD` utilizando `ORM`;
 
+## ⚽ Stacks utilizadas para a criação de uma Api Rest
+  - TypeScript;
+  - Node.js;
+  - Express;
+  - Sequelize (ORM);
+  - Docker / Docker-compose;
+  - TDD com Mocha e Chai;
+  - MySQL;
+  
+---
+
+     O FrontEnd foi desta aplicação foi realizado pela Trybe
+    
+    
 
 ## Acessando o repositório:
 
